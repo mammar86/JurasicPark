@@ -17,6 +17,15 @@ namespace JurasicPark
 
         public int EnclosureNumber { get; set; }
 
+        public string Description()
+        {
+
+            var details = $"{Name} is a {DietType} dinosaur added on {WhenAcquired} and weights {Weight} lbs and it's location is enclosure number {EnclosureNumber}";
+
+            return details;
+
+        }
+
     }
 
 
@@ -39,7 +48,7 @@ namespace JurasicPark
 
         }
 
-        static void menu()
+        static void Menu()
         {
 
             Console.WriteLine("What do you need to do?");
@@ -59,7 +68,18 @@ namespace JurasicPark
 
         }
 
+        static Dinosaur DinoSearch(List<Dinosaur> dinosaurs)
+        {
 
+            Console.Write("What is the dino's name? Answer: ");
+            var dinoName = Console.ReadLine();
+
+            var foundDino = dinosaurs.FirstOrDefault(Pet => Pet.Name == dinoName);
+
+            return foundDino;
+
+
+        }
 
         static void Main(string[] args)
         {
@@ -103,7 +123,7 @@ namespace JurasicPark
             while (quit != true)
             {
 
-                menu();
+                Menu();
 
                 var action = Console.ReadLine();
 
@@ -124,11 +144,11 @@ namespace JurasicPark
                     var diet = Console.ReadLine();
 
 
-                    Console.WriteLine("what is the weight of the dino in lb? Answer: ");
+                    Console.Write("what is the weight of the dino in lbs? Answer: ");
                     var weight = int.Parse(Console.ReadLine());
 
 
-                    Console.WriteLine("What is the enclosure number you wish to put the dino in? Answer: ");
+                    Console.Write("What is the enclosure number you wish to put the dino in? Answer: ");
                     var enclosure = int.Parse(Console.ReadLine());
 
 
@@ -149,6 +169,35 @@ namespace JurasicPark
 
 
                 }
+                else if (action == "View")
+                {
+                    var orderedByDate = dinosaurs.OrderBy(dino => dino.WhenAcquired);
+
+                    foreach (var dinosaur in dinosaurs)
+                    {
+
+                        Console.WriteLine(dinosaur.Description());
+
+                        Console.WriteLine();
+
+                        Console.Write("Is there is any thing else you need to do? press y for yes or press any key for no Answer: ");
+
+                        var answer = Console.ReadLine();
+
+                        if (answer != "y")
+                        {
+
+                            quit = true;
+                            Console.WriteLine("-----Good bye----");
+                            Console.WriteLine();
+
+                        }
+
+
+                    }
+
+                }
+
                 else if (action == "Remove")
                 {
 
@@ -160,11 +209,45 @@ namespace JurasicPark
                     if (foundDino != null)
                     {
 
-                        Console.WriteLine($"{foundDino.Name} is a {foundDino.DietType} dinosaur added on {foundDino.WhenAcquired} and weights {foundDino.Weight} lbs and it's location is enclosure number {foundDino.EnclosureNumber}");
+                        Console.WriteLine(foundDino.Description());
 
-                        dinosaurs.Remove(foundDino);
+                        Console.WriteLine();
 
-                        Console.WriteLine($"{foundDino.Name} has been successfully removed from the park's database");
+                        Console.WriteLine($"Are you sure you want to remove this Dinosaur from the datebase? y|n");
+
+                        var answer = Console.ReadLine();
+
+                        if (answer == "y")
+                        {
+                            dinosaurs.Remove(foundDino);
+
+                            Console.WriteLine();
+
+                            Console.WriteLine($"{foundDino.Name} has been successfully removed from the park's database");
+
+                            Console.WriteLine();
+
+                            Console.Write("Is there is any thing else you need to do? press y for yes or press any key for no Answer: ");
+
+                            var Choice = Console.ReadLine();
+
+                            if (Choice != "y")
+                            {
+
+                                quit = true;
+                                Console.WriteLine("-----Good bye----");
+                                Console.WriteLine();
+
+
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+
+
 
                     }
                     else
@@ -178,10 +261,7 @@ namespace JurasicPark
                 else if (action == "Transfer")
                 {
 
-                    Console.Write("What is the dino's name? Answer: ");
-                    var dinoName = Console.ReadLine();
-
-                    var foundDino = dinosaurs.FirstOrDefault(Pet => Pet.Name == dinoName);
+                    var foundDino = DinoSearch(dinosaurs);
 
                     if (foundDino != null)
                     {
@@ -206,6 +286,9 @@ namespace JurasicPark
                         {
 
                             quit = true;
+                            Console.WriteLine("-----Good bye----");
+                            Console.WriteLine();
+
 
                         }
 
@@ -236,18 +319,12 @@ namespace JurasicPark
                     {
 
                         quit = true;
+                        Console.WriteLine("-----Good bye----");
+                        Console.WriteLine();
+
 
                     }
                 }
-
-
-
-
-
-
-
-
-
 
 
 
